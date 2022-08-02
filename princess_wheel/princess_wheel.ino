@@ -40,8 +40,6 @@ void setup() {
 void loop() {
   Serial.print("Daily Miles: ");
   Serial.println(dailyMiles);
-  Serial.print("Counter: ");
-  Serial.println(counter);
   delay(1000);
   UpdateCount();
 }
@@ -72,7 +70,7 @@ void UpdateLCD() { // updates lcd
 }
 
 void UpdateCount() { // updates daily / total vals to system and resets tmp and counter
-  dailyMiles = dailyMiles + (counter * rev  );//63360);
+  dailyMiles = dailyMiles + (counter * rev / 63360);
   totalMiles = totalMiles + (counter * rev / 63360);
   counter = 0;
   
