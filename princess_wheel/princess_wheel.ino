@@ -1,4 +1,5 @@
 #include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 #include <TimeLib.h>
 #include <EEPROM.h>
 
@@ -31,17 +32,25 @@ void setup() {
   // Hall effect sensor as input
   pinMode(HEpin, INPUT); 
   
-  setTime(5, 27, 30, 2, 8, 2022); // setting time
+  setTime(0, 0, 0, 2, 8, 2022); // setting time
   
   // Interrupt which increments counter on sensor input
   attachInterrupt(digitalPinToInterrupt(HEpin), boop, RISING); 
 }
 
 void loop() {
-  Serial.print("Daily Miles: ");
-  Serial.println(dailyMiles);
-  delay(1000);
+  
   UpdateCount();
+  // display lcd
+  // WAITTTTTTTTTT
+  // 
+  UpdateLCD();
+  
+  // reset daily stuff every 24hrs
+  if (hour() == 23) 
+    DailyReset();
+  
+  delay(5000);   
 }
 
 void boop() {
@@ -51,9 +60,9 @@ void boop() {
 
 void DailyReset () { // reset counter and store highscores/other data
   // saving Highscore val:
-  if (dailyMiles > Highscore) {
+  if (dailyMiles > Highscore)
     Highscore = dailyMiles;
-  }
+  
   EEPROM.write(2, Highscore);
 
   // saving total Miles
@@ -77,7 +86,7 @@ void UpdateCount() { // updates daily / total vals to system and resets tmp and 
   // saving dailyMiles val
   EEPROM.write(0, dailyMiles);
 
-  // update totalMiles
+  // saving totalMiles
   EEPROM.write(1, totalMiles);
   
 }
