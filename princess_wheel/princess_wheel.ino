@@ -26,13 +26,14 @@ void setup() {
   totalMiles = EEPROM.read(1);
   // getting highscore data stored in R2
   Highscore = EEPROM.read(2);
+
   
   Serial.begin(9600);
   
   // Hall effect sensor as input
   pinMode(HEpin, INPUT); 
   
-  setTime(0, 0, 0, 2, 8, 2022); // setting time
+  setTime(EEPROM.read(3), 0, 0, 2, 8, 2022); // setting time
   
   // Interrupt which increments counter on sensor input
   attachInterrupt(digitalPinToInterrupt(HEpin), boop, RISING); 
@@ -74,7 +75,7 @@ void DailyReset () { // reset counter and store highscores/other data
   
 }
 
-void UpdateLCD() { // updates lcd 
+void UpdateLCD() { // updates  and displays lcd 
   // slade
 }
 
@@ -88,5 +89,8 @@ void UpdateCount() { // updates daily / total vals to system and resets tmp and 
 
   // saving totalMiles
   EEPROM.write(1, totalMiles);
+
+  // saving time
+  EEPROM.write(3, hour());
   
 }
